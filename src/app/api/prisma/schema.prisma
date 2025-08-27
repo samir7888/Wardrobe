@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Category {
+  TOP
+  BOTTOM
+  OUTERWEAR
+  FOOTWEAR
+  ACCESSORY
+}
+
+model User {
+  id        String         @id @default(cuid())
+  email     String         @unique
+  password  String
+  items     WardrobeItem[]
+  createdAt DateTime       @default(now())
+}
+
+model WardrobeItem {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  title     String
+  category  Category
+  color     String?
+  season    String? // "summer|winter|all"
+  imageUrl  String
+  cloudId   String // Cloudinary public_id
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, category])
+  @@index([createdAt])
+}

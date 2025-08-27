@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# API specific
+src/app/api/node_modules/
+src/app/api/dist/
+src/app/api/.env
+src/app/api/generated/
+
+# Database
+*.db
+*.sqlite
+
+# Docker
+docker-compose.override.yml
