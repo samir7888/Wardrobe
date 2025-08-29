@@ -45,3 +45,25 @@ export interface ApiError {
   statusCode: number;
   error?: string;
 }
+
+export interface Outfit {
+  id: string;
+  name: string;
+  items: {
+    top?: Item;
+    bottom?: Item;
+    shoes?: Item;
+    accessories?: Item;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OutfitSelection {
+  top?: Item;
+  bottom?: Item;
+  shoes?: Item;
+  accessories?: Item;
+}
+
+export type ClothingCategory = "top" | "bottom" | "shoes" | "accessories";
