@@ -11,8 +11,7 @@ import {
   BarChart3,
   Grid3X3,
   Heart,
-  TrendingUp,
-  Calendar,
+  
 } from "lucide-react";
 
 export default function DashboardPage() {

@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/select";
 import { ArrowLeft, Upload } from "lucide-react";
 import Link from "next/link";
+import ImageUpload from "@/components/ImageUpload";
 
 // Category enum based on Prisma schema
 const categories = [
@@ -49,16 +50,15 @@ const formSchema = z.object({
   season: z.string().optional(),
   notes: z.string().optional(),
   image: z
-    .instanceof(FileList)
-    .refine((files) => files?.length === 1, "Image is required")
+    .instanceof(File)
     .refine(
-      (files) => files?.[0]?.size <= 5 * 1024 * 1024,
+      (file) => file.size <= 5 * 1024 * 1024,
       "Image must be less than 5MB"
     )
     .refine(
-      (files) =>
+      (file) =>
         ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
-          files?.[0]?.type
+          file.type
         ),
       "Only JPEG, PNG, and WebP images are allowed"
     ),
@@ -69,6 +69,7 @@ type FormData = z.infer<typeof formSchema>;
 export default function NewItemPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const router = useRouter();
 
   const form = useForm<FormData>({
@@ -82,17 +83,21 @@ export default function NewItemPage() {
     },
   });
 
-  const handleImageChange = (files: FileList | null) => {
-    if (files && files[0]) {
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setImagePreview(null);
-    }
+  const handleImageSelect = (file: File) => {
+    setSelectedImage(file);
+    form.setValue("image", file);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImagePreview(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleImageRemove = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+    form.setValue("image", undefined as any);
   };
 
   const onSubmit = async (data: FormData) => {
@@ -104,7 +109,7 @@ export default function NewItemPage() {
       if (data.color) formData.append("color", data.color);
       if (data.season) formData.append("season", data.season);
       if (data.notes) formData.append("notes", data.notes);
-      formData.append("image", data.image[0]);
+      formData.append("image", data.image);
 
       await itemsAPI.createItem(formData);
       router.push("/items");
@@ -260,34 +265,21 @@ export default function NewItemPage() {
                 <FormField
                   control={form.control}
                   name="image"
-                  render={({ field: { onChange, value, ...field } }) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Image *</FormLabel>
                       <FormControl>
-                        <div className="space-y-4">
-                          <Input
-                            type="file"
-                            accept="image/jpeg,image/jpg,image/png,image/webp"
-                            onChange={(e) => {
-                              const files = e.target.files;
-                              onChange(files);
-                              handleImageChange(files);
-                            }}
-                            {...field}
-                          />
-                          {imagePreview && (
-                            <div className="mt-4">
-                              <img
-                                src={imagePreview}
-                                alt="Preview"
-                                className="w-32 h-32 object-cover rounded-md border"
-                              />
-                            </div>
-                          )}
-                        </div>
+                        <ImageUpload
+                          onImageSelect={handleImageSelect}
+                          onImageRemove={handleImageRemove}
+                          imagePreview={imagePreview}
+                          accept="image/jpeg,image/jpg,image/png,image/webp"
+                          maxSize={5 * 1024 * 1024}
+                        />
                       </FormControl>
                       <FormDescription>
-                        Upload an image of your item (max 5MB, JPEG/PNG/WebP)
+                        Upload an image of your item or take a photo with your
+                        camera (max 5MB)
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
