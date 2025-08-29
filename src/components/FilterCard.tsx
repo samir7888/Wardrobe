@@ -66,54 +66,56 @@ export default function FilterCard({
     return "No tabs available";
   }
   return (
-    <Card
-      className={`p-1 rounded-full tracking-wide font-normal border border-gray-300   ${
-        isProduct ? "bg-brand-primary" : "bg-gray-200"
-      }`}
-    >
-      <CardContent className="p-0">
-        <div className="relative">
-          {/* Hover Highlight */}
-          <div
-            className="absolute h-[30px]  transition-all duration-300 ease-out p-6  bg-white rounded-3xl flex items-center"
-            style={{
-              ...hoverStyle,
-              opacity: hoveredIndex !== null ? 1 : 0,
-            }}
-          />
+    <div className="w-full overflow-x-auto">
+      <Card
+        className={`inline-flex min-w-max p-1 rounded-full tracking-wide font-normal border border-gray-300 ${
+          isProduct ? "bg-brand-primary" : "bg-gray-200"
+        }`}
+      >
+        <CardContent className="p-0">
+          <div className="relative">
+            {/* Hover Highlight */}
+            <div
+              className="absolute h-[30px] transition-all duration-300 ease-out bg-white rounded-3xl flex items-center"
+              style={{
+                ...hoverStyle,
+                opacity: hoveredIndex !== null ? 1 : 0,
+              }}
+            />
 
-          {/* Tabs */}
-          <div className="relative  flex space-x-[6px] items-center">
-            {tabs.map((tab: string, index: number) => (
-              <div
-                key={index}
-                ref={(el: HTMLDivElement | null) => {
-                  tabRefs.current[index] = el;
-                }}
-                className={`p-6 font-medium cursor-pointer rounded-3xl tracking-wide  transition-colors duration-300 h-[30px] ${
-                  index === activeIndex
-                    ? "bg-white text-black "
-                    : `${
-                        isProduct
-                          ? "text-white hover:text-black"
-                          : "text-gray-400"
-                      } `
-                }`}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                onClick={() => {
-                  setActiveIndex(index);
-                  onTabChange?.(index, tab);
-                }}
-              >
-                <div className="text-sm leading-5 whitespace-nowrap flex items-center justify-center h-full">
-                  {tab}
+            {/* Tabs */}
+            <div className="relative flex space-x-[6px] items-center">
+              {tabs.map((tab: string, index: number) => (
+                <div
+                  key={index}
+                  ref={(el: HTMLDivElement | null) => {
+                    tabRefs.current[index] = el;
+                  }}
+                  className={`px-3 sm:px-4 md:px-6 py-2 font-medium cursor-pointer rounded-3xl tracking-wide transition-colors duration-300 h-[30px] flex items-center justify-center ${
+                    index === activeIndex
+                      ? "bg-white text-black"
+                      : `${
+                          isProduct
+                            ? "text-white hover:text-black"
+                            : "text-gray-400"
+                        }`
+                  }`}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  onClick={() => {
+                    setActiveIndex(index);
+                    onTabChange?.(index, tab);
+                  }}
+                >
+                  <div className="text-xs sm:text-sm leading-5 whitespace-nowrap">
+                    {tab}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

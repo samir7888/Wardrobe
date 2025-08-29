@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { itemsAPI } from "@/lib/api";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Sidebar from "@/components/Sidebar";
@@ -18,6 +18,14 @@ interface Item {
   createdAt: string;
 }
 
+interface PaginatedResponse {
+  items: Item[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
 const CATEGORIES = [
   "All",
   "TOP",
@@ -27,40 +35,116 @@ const CATEGORIES = [
   "ACCESSORY",
 ];
 
+const ITEMS_PER_PAGE = 20;
+
 export default function ItemsPage() {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [totalItems, setTotalItems] = useState(0);
+
+  const observer = useRef<IntersectionObserver>(null);
+
+  const loadMoreItems = useCallback(async () => {
+    if (loadingMore || !hasMore) return;
+
+    setLoadingMore(true);
+
+    try {
+      const selectedCategory = CATEGORIES[selectedCategoryIndex];
+      const params: any = {
+        page: currentPage + 1,
+        limit: ITEMS_PER_PAGE,
+      };
+
+      if (selectedCategory !== "All") {
+        params.category = selectedCategory;
+      }
+
+      const data: PaginatedResponse = await itemsAPI.getItems(params);
+      setItems((prev) => [...prev, ...data.items]);
+      setHasMore(data.page < data.totalPages);
+      setCurrentPage((prev) => prev + 1);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Failed to load more items");
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [loadingMore, hasMore, selectedCategoryIndex, currentPage]);
+
+  const lastItemElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (loading || loadingMore) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          loadMoreItems();
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading, loadingMore, hasMore, loadMoreItems]
+  );
 
   useEffect(() => {
-    fetchItems();
-  }, []);
+    fetchItems(true);
+  }, [selectedCategoryIndex]);
 
-  const fetchItems = async () => {
+  const fetchItems = async (reset = false) => {
     try {
-      setLoading(true);
-      const data = await itemsAPI.getItems();
-      setItems(data.items);
+      if (reset) {
+        setLoading(true);
+        setCurrentPage(1);
+        setItems([]);
+        setError("");
+      }
+
+      const selectedCategory = CATEGORIES[selectedCategoryIndex];
+      const params: any = {
+        page: reset ? 1 : currentPage,
+        limit: ITEMS_PER_PAGE,
+      };
+
+      if (selectedCategory !== "All") {
+        params.category = selectedCategory;
+      }
+
+      const data: PaginatedResponse = await itemsAPI.getItems(params);
+
+      if (reset) {
+        setItems(data.items);
+      } else {
+        setItems((prev) => [...prev, ...data.items]);
+      }
+
+      setTotalItems(data.total);
+      setHasMore(data.page < data.totalPages);
+
+      if (!reset) {
+        setCurrentPage((prev) => prev + 1);
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to fetch items");
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
   const filteredItems = useMemo(() => {
-    const selectedCategory = CATEGORIES[selectedCategoryIndex];
-    if (selectedCategory === "All") {
-      return items.filter((item) => item.imageUrl);
-    }
-    return items.filter(
-      (item) => item.category === selectedCategory && item.imageUrl
-    );
-  }, [items, selectedCategoryIndex]);
+    return items.filter((item) => item.imageUrl);
+  }, [items]);
 
-  const handleCategoryChange = (index: number, category: string) => {
-    setSelectedCategoryIndex(index);
+  const handleCategoryChange = (index: number) => {
+    if (index !== selectedCategoryIndex) {
+      setSelectedCategoryIndex(index);
+      setCurrentPage(1);
+      setHasMore(true);
+    }
   };
 
   if (loading) {
@@ -78,17 +162,19 @@ export default function ItemsPage() {
   return (
     <ProtectedRoute>
       <Sidebar>
-        <div className="p-6">
+        <div className="p-1">
           <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-            <div className="px-4 py-6 sm:px-0">
+            <div className="md:px-4 py-6 sm:px-0">
               {/* Category Filter */}
-              <div className="mb-8 flex justify-center">
-                <FilterCard
-                  tabs={CATEGORIES}
-                  activeIndex={selectedCategoryIndex}
-                  onTabChange={handleCategoryChange}
-                  isProduct={false}
-                />
+              <div className="mb-8 w-full flex justify-center px-2">
+                <div className="w-full max-w-4xl">
+                  <FilterCard
+                    tabs={CATEGORIES}
+                    activeIndex={selectedCategoryIndex}
+                    onTabChange={handleCategoryChange}
+                    isProduct={false}
+                  />
+                </div>
               </div>
 
               {error && (
@@ -97,7 +183,18 @@ export default function ItemsPage() {
                 </div>
               )}
 
-              {items.length === 0 ? (
+              {/* Stats */}
+              {totalItems > 0 && (
+                <div className="mb-6 text-center">
+                  <p className="text-sm text-gray-600">
+                    Showing {filteredItems.length} of {totalItems} items
+                    {CATEGORIES[selectedCategoryIndex] !== "All" &&
+                      ` in ${CATEGORIES[selectedCategoryIndex].toLowerCase()}`}
+                  </p>
+                </div>
+              )}
+
+              {items.length === 0 && !loading ? (
                 <div className="text-center py-12">
                   <p className="text-gray-500 text-lg">
                     No items in your wardrobe yet.
@@ -109,7 +206,7 @@ export default function ItemsPage() {
                     Add Your First Item
                   </Link>
                 </div>
-              ) : filteredItems.length === 0 ? (
+              ) : filteredItems.length === 0 && !loading ? (
                 <div className="text-center py-12">
                   <p className="text-gray-500 text-lg">
                     No items found in the{" "}
@@ -123,32 +220,57 @@ export default function ItemsPage() {
                   </Link>
                 </div>
               ) : (
-                <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-4 space-y-4">
-                  {filteredItems.map((item) => (
-                    <Link key={item.id} href={`/items/${item.id}`}>
-                      <div className="break-inside-avoid mb-4 group">
-                        <div className="relative overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02]">
-                          <img
-                            className="w-full h-auto object-cover"
-                            src={item.imageUrl}
-                            alt={item.title}
-                            loading="lazy"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black group-hover:bg-opacity-20 transition-all duration-300 flex items-end ">
-                            <div className="w-full p-3 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              <h3 className="text-white text-sm font-medium truncate">
-                                {item.title}
-                              </h3>
-                              <p className="text-white/80 text-xs">
-                                {item.category}
-                              </p>
+                <>
+                  <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-4 space-y-4">
+                    {filteredItems.map((item, index) => (
+                      <Link key={item.id} href={`/items/${item.id}`}>
+                        <div
+                          ref={
+                            index === filteredItems.length - 1
+                              ? lastItemElementRef
+                              : null
+                          }
+                          className="break-inside-avoid mb-4 group"
+                        >
+                          <div className="relative overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02]">
+                            <img
+                              className="w-full h-auto object-cover"
+                              src={item.imageUrl}
+                              alt={item.title}
+                              loading="lazy"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black group-hover:bg-opacity-20 transition-all duration-300 flex items-end ">
+                              <div className="w-full p-3 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <h3 className="text-white text-sm font-medium truncate">
+                                  {item.title}
+                                </h3>
+                                <p className="text-white/80 text-xs">
+                                  {item.category}
+                                </p>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
+                      </Link>
+                    ))}
+                  </div>
+
+                  {/* Loading More Indicator */}
+                  {loadingMore && (
+                    <div className="flex justify-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                    </div>
+                  )}
+
+                  {/* End of Results */}
+                  {!hasMore && filteredItems.length > 0 && (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 text-sm">
+                        You've reached the end of your wardrobe!
+                      </p>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>

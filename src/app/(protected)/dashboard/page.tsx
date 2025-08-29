@@ -80,7 +80,10 @@ export default function DashboardPage() {
           {/* Welcome Header */}
           <div className="mb-8">
             <h1 className="text-2xl font-bold text-gray-900">
-              Welcome back, User
+              Welcome back,{" "}
+              {user?.name
+                ? user.name.charAt(0).toUpperCase() + user.name.slice(1)
+                : "User"}
             </h1>
             <p className="text-gray-600">
               Here's what's happening with your wardrobe today.
@@ -153,7 +156,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Recent Activity */}
-          <div className="bg-white shadow rounded-lg">
+          <div className="bg-white shadow rounded-lg h-fit">
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-lg font-medium text-gray-900">
                 Recent Activity
@@ -211,7 +214,7 @@ export default function DashboardPage() {
                     </div>
                   </li>
                   <li>
-                    <div className="relative">
+                    <div className="relative pb-6">
                       <div className="relative flex space-x-3">
                         <div>
                           <span className="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center ring-8 ring-white">

@@ -137,7 +137,7 @@ export default function Sidebar({ children }: SidebarProps) {
               size="sm"
               onClick={() => setSidebarOpen(true)}
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5 text-black" />
             </Button>
             <h1 className="text-lg font-semibold text-gray-900">Wardrobe</h1>
             <div className="w-8" /> {/* Spacer for centering */}
@@ -216,7 +216,7 @@ function SidebarContent({
           variant="ghost"
           size="sm"
           onClick={onLogout}
-          className="w-full mt-3 justify-start text-gray-600 hover:text-gray-900"
+          className="w-full mt-3 justify-start text-gray-600 hover:text-gray-100"
         >
           <LogOut className="mr-2 h-4 w-4" />
           Sign out
