@@ -4,15 +4,8 @@ import { useAuthStore } from "@/store/authStore";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
-import {
-  Plus,
-  Shirt,
-  Palette,
-  BarChart3,
-  Grid3X3,
-  Heart,
-  
-} from "lucide-react";
+import { Plus, Shirt, Palette, BarChart3, Grid3X3, Heart } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
@@ -75,25 +68,28 @@ export default function DashboardPage() {
   return (
     <ProtectedRoute>
       <Sidebar>
-        <div className="p-6">
+        <div className="p-6 bg-white dark:bg-gray-900 min-h-screen">
           {/* Welcome Header */}
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Welcome back,{" "}
-              {user?.name
-                ? user.name.charAt(0).toUpperCase() + user.name.slice(1)
-                : "User"}
-            </h1>
-            <p className="text-gray-600">
-              Here's what's happening with your wardrobe today.
-            </p>
+          <div className="mb-8 flex justify-between items-start">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Welcome back,{" "}
+                {user?.name
+                  ? user.name.charAt(0).toUpperCase() + user.name.slice(1)
+                  : "User"}
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300">
+                Here's what's happening with your wardrobe today.
+              </p>
+            </div>
+            <ThemeToggle />
           </div>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {stats.map((stat) => (
               <Link key={stat.name} href={stat.href} className="block">
-                <div className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow">
+                <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700">
                   <div className="p-5">
                     <div className="flex items-center">
                       <div className="flex-shrink-0">
@@ -105,10 +101,10 @@ export default function DashboardPage() {
                       </div>
                       <div className="ml-5 w-0 flex-1">
                         <dl>
-                          <dt className="text-sm font-medium text-gray-500 truncate">
+                          <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
                             {stat.name}
                           </dt>
-                          <dd className="text-2xl font-bold text-gray-900">
+                          <dd className="text-2xl font-bold text-gray-900 dark:text-white">
                             {stat.value}
                           </dd>
                         </dl>
@@ -122,13 +118,13 @@ export default function DashboardPage() {
 
           {/* Quick Actions */}
           <div className="mb-8">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">
+            <h2 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
               Quick Actions
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {quickActions.map((action) => (
                 <Link key={action.name} href={action.href} className="block">
-                  <div className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow">
+                  <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700">
                     <div className="p-6">
                       <div className="flex items-center">
                         <div className="flex-shrink-0">
@@ -139,10 +135,10 @@ export default function DashboardPage() {
                           </div>
                         </div>
                         <div className="ml-4">
-                          <h3 className="text-lg font-medium text-gray-900">
+                          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                             {action.name}
                           </h3>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
                             {action.description}
                           </p>
                         </div>
@@ -155,9 +151,9 @@ export default function DashboardPage() {
           </div>
 
           {/* Recent Activity */}
-          <div className="bg-white shadow rounded-lg h-fit">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-medium text-gray-900">
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg h-fit border border-gray-200 dark:border-gray-700">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-medium text-gray-900 dark:text-white">
                 Recent Activity
               </h2>
             </div>
@@ -168,20 +164,20 @@ export default function DashboardPage() {
                     <div className="relative pb-8">
                       <div className="relative flex space-x-3">
                         <div>
-                          <span className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center ring-8 ring-white">
+                          <span className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center ring-8 ring-white dark:ring-gray-800">
                             <Plus className="w-4 h-4 text-white" />
                           </span>
                         </div>
                         <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                           <div>
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
                               Added new item{" "}
-                              <span className="font-medium text-gray-900">
+                              <span className="font-medium text-gray-900 dark:text-white">
                                 Blue Denim Jacket
                               </span>
                             </p>
                           </div>
-                          <div className="text-right text-sm whitespace-nowrap text-gray-500">
+                          <div className="text-right text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                             <time>2 hours ago</time>
                           </div>
                         </div>
@@ -192,20 +188,20 @@ export default function DashboardPage() {
                     <div className="relative pb-8">
                       <div className="relative flex space-x-3">
                         <div>
-                          <span className="h-8 w-8 rounded-full bg-purple-500 flex items-center justify-center ring-8 ring-white">
+                          <span className="h-8 w-8 rounded-full bg-purple-500 flex items-center justify-center ring-8 ring-white dark:ring-gray-800">
                             <Palette className="w-4 h-4 text-white" />
                           </span>
                         </div>
                         <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                           <div>
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
                               Created outfit{" "}
-                              <span className="font-medium text-gray-900">
+                              <span className="font-medium text-gray-900 dark:text-white">
                                 Casual Friday
                               </span>
                             </p>
                           </div>
-                          <div className="text-right text-sm whitespace-nowrap text-gray-500">
+                          <div className="text-right text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                             <time>1 day ago</time>
                           </div>
                         </div>
@@ -216,21 +212,21 @@ export default function DashboardPage() {
                     <div className="relative pb-6">
                       <div className="relative flex space-x-3">
                         <div>
-                          <span className="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center ring-8 ring-white">
+                          <span className="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center ring-8 ring-white dark:ring-gray-800">
                             <Heart className="w-4 h-4 text-white" />
                           </span>
                         </div>
                         <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                           <div>
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
                               Added{" "}
-                              <span className="font-medium text-gray-900">
+                              <span className="font-medium text-gray-900 dark:text-white">
                                 White Sneakers
                               </span>{" "}
                               to favorites
                             </p>
                           </div>
-                          <div className="text-right text-sm whitespace-nowrap text-gray-500">
+                          <div className="text-right text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                             <time>3 days ago</time>
                           </div>
                         </div>
