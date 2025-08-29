@@ -4,6 +4,8 @@ import { authAPI, setAccessToken, getAccessToken } from "@/lib/api";
 interface User {
   id: string;
   email: string;
+
+  name: string;
 }
 
 interface AuthState {

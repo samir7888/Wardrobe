@@ -22,6 +22,12 @@ export class UserDto {
   id: string;
 
   @ApiProperty({
+    description: 'User full name',
+    example: 'John Doe',
+  })
+  name: string;
+
+  @ApiProperty({
     description: 'User email',
     example: 'john.doe@example.com',
   })

@@ -9,7 +9,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { AuthService, LoginDto, RegisterDto } from './auth.service';
+import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import type { Request, Response } from 'express';
 import { RegisterRequestDto } from './dtos/register.dto';
@@ -22,7 +22,6 @@ import {
   ApiBody,
   ApiCookieAuth,
 } from '@nestjs/swagger';
-import { AuthResponseDto, UserDto } from './dtos/auth-response.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -191,9 +190,9 @@ export class AuthController {
           type: 'object',
           properties: {
             id: { type: 'string', example: 'clm123456789' },
+            name: { type: 'string', example: 'John Doe' },
             email: { type: 'string', example: 'john.doe@example.com' },
             createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
-            updatedAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
           },
         },
       },

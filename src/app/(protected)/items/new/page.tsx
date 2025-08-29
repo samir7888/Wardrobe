@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { itemsAPI } from "@/lib/api";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import Sidebar from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -117,7 +118,7 @@ export default function NewItemPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
+      <Sidebar>
         <div className="max-w-2xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
             <Link
@@ -319,7 +320,7 @@ export default function NewItemPage() {
             </Form>
           </div>
         </div>
-      </div>
+      </Sidebar>
     </ProtectedRoute>
   );
 }

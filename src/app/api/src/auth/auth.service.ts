@@ -13,6 +13,7 @@ export interface LoginDto {
 }
 
 export interface RegisterDto {
+  name: string;
   email: string;
   password: string;
 }
@@ -20,6 +21,7 @@ export interface RegisterDto {
 export interface JwtPayload {
   sub: string;
   email: string;
+  name: string;
   iat?: number;
   exp?: number;
 }
@@ -52,19 +54,21 @@ export class AuthService {
     // Create user
     const user = await this.prisma.user.create({
       data: {
+        name: dto.name,
         email: dto.email,
         password: hashedPassword,
       },
     });
 
     // Generate tokens
-    return this.generateTokens(user.id, user.email);
+    return this.generateTokens(user.id, user.email, user.name);
   }
 
   async login(dto: LoginDto): Promise<AuthTokens> {
     // Find user by email
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
+      select: { id: true, email: true, name: true, password: true },
     });
 
     if (!user) {
@@ -79,7 +83,7 @@ export class AuthService {
     }
 
     // Generate tokens
-    return this.generateTokens(user.id, user.email);
+    return this.generateTokens(user.id, user.email, user.name);
   }
 
   async refreshTokens(refreshToken: string): Promise<AuthTokens> {
@@ -91,6 +95,7 @@ export class AuthService {
       // Verify user still exists
       const user = await this.prisma.user.findUnique({
         where: { id: payload.sub },
+        select: { id: true, email: true, name: true },
       });
 
       if (!user) {
@@ -98,7 +103,7 @@ export class AuthService {
       }
 
       // Generate new tokens
-      return this.generateTokens(user.id, user.email);
+      return this.generateTokens(user.id, user.email, user.name);
     } catch (error) {
       throw new UnauthorizedException('Invalid refresh token');
     }
@@ -107,10 +112,12 @@ export class AuthService {
   private async generateTokens(
     userId: string,
     email: string,
+    name: string,
   ): Promise<AuthTokens> {
     const payload: JwtPayload = {
       sub: userId,
       email,
+      name,
     };
 
     const [accessToken, refreshToken] = await Promise.all([
@@ -135,7 +142,7 @@ export class AuthService {
   async validateUser(payload: JwtPayload) {
     const user = await this.prisma.user.findUnique({
       where: { id: payload.sub },
-      select: { id: true, email: true, createdAt: true },
+      select: { id: true, email: true, name: true, createdAt: true },
     });
 
     if (!user) {
