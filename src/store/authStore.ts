@@ -14,6 +14,7 @@ interface AuthState {
   isLoading: boolean;
   isAuthenticated: boolean;
   isInitialized: boolean;
+  error: string | null;
 
   // Actions
   login: (email: string, password: string) => Promise<void>;
@@ -22,6 +23,7 @@ interface AuthState {
   refreshAuth: () => Promise<void>;
   clearAuth: () => void;
   initializeAuth: () => Promise<void>;
+  clearError: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -30,9 +32,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isLoading: false,
   isAuthenticated: false,
   isInitialized: false,
+  error: null,
 
   login: async (email: string, password: string) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
       const response = await authAPI.login(email, password);
       const { accessToken } = response;
@@ -48,15 +51,20 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         accessToken,
         isAuthenticated: true,
         isLoading: false,
+        error: null,
       });
-    } catch (error) {
-      set({ isLoading: false });
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || "Login failed";
+      set({
+        isLoading: false,
+        error: errorMessage,
+      });
       throw error;
     }
   },
 
   register: async (email: string, password: string, name: string) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
       const response = await authAPI.register(email, password, name);
       const { accessToken } = response;
@@ -72,9 +80,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         accessToken,
         isAuthenticated: true,
         isLoading: false,
+        error: null,
       });
-    } catch (error) {
-      set({ isLoading: false });
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message || "Registration failed";
+      set({
+        isLoading: false,
+        error: errorMessage,
+      });
       throw error;
     }
   },
@@ -142,5 +156,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } finally {
       set({ isLoading: false, isInitialized: true });
     }
+  },
+
+  clearError: () => {
+    set({ error: null });
   },
 }));
