@@ -90,10 +90,12 @@ export default function ItemDetailsPage() {
   if (loading) {
     return (
       <ProtectedRoute>
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading item...</p>
+            <p className="mt-4 text-gray-600 dark:text-gray-300">
+              Loading item...
+            </p>
           </div>
         </div>
       </ProtectedRoute>
@@ -103,18 +105,18 @@ export default function ItemDetailsPage() {
   if (error) {
     return (
       <ProtectedRoute>
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
           <div className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <div className="mb-6">
               <Link
                 href="/items"
-                className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700"
+                className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
               >
                 <ArrowLeft className="w-4 h-4 mr-1" />
                 Back to Items
               </Link>
             </div>
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <div className="bg-red-100 dark:bg-red-900/20 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-400 px-4 py-3 rounded">
               {error}
             </div>
           </div>
@@ -126,19 +128,21 @@ export default function ItemDetailsPage() {
   if (!item) {
     return (
       <ProtectedRoute>
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
           <div className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <div className="mb-6">
               <Link
                 href="/items"
-                className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700"
+                className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
               >
                 <ArrowLeft className="w-4 h-4 mr-1" />
                 Back to Items
               </Link>
             </div>
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">Item not found.</p>
+              <p className="text-gray-500 dark:text-gray-400 text-lg">
+                Item not found.
+              </p>
             </div>
           </div>
         </div>
@@ -148,13 +152,13 @@ export default function ItemDetailsPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           {/* Navigation */}
           <div className="mb-6">
             <Link
               href="/items"
-              className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700"
+              className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
             >
               <ArrowLeft className="w-4 h-4 mr-1" />
               Back to Items
@@ -162,7 +166,7 @@ export default function ItemDetailsPage() {
           </div>
 
           {/* Main Content */}
-          <div className="bg-white shadow rounded-lg overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
             <div className="md:flex">
               {/* Image Section */}
               <div className="md:w-1/2">
@@ -173,12 +177,14 @@ export default function ItemDetailsPage() {
                     className="w-full h-96 md:h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-96 md:h-full bg-gray-200 flex items-center justify-center">
+                  <div className="w-full h-96 md:h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                     <div className="text-center">
-                      <div className="w-16 h-16 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
-                        <Tag className="w-8 h-8 text-gray-500" />
+                      <div className="w-16 h-16 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <Tag className="w-8 h-8 text-gray-500 dark:text-gray-400" />
                       </div>
-                      <p className="text-gray-500">No image available</p>
+                      <p className="text-gray-500 dark:text-gray-400">
+                        No image available
+                      </p>
                     </div>
                   </div>
                 )}
@@ -188,10 +194,10 @@ export default function ItemDetailsPage() {
               <div className="md:w-1/2 p-6">
                 <div className="flex justify-between items-start mb-6">
                   <div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                       {item.title}
                     </h1>
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200">
                       {getCategoryLabel(item.category)}
                     </span>
                   </div>
@@ -218,24 +224,26 @@ export default function ItemDetailsPage() {
                 <div className="space-y-4">
                   {item.color && (
                     <div className="flex items-center">
-                      <Palette className="w-5 h-5 text-gray-400 mr-3" />
+                      <Palette className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-3" />
                       <div>
-                        <p className="text-sm font-medium text-gray-500">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           Color
                         </p>
-                        <p className="text-gray-900 capitalize">{item.color}</p>
+                        <p className="text-gray-900 dark:text-white capitalize">
+                          {item.color}
+                        </p>
                       </div>
                     </div>
                   )}
 
                   {item.season && (
                     <div className="flex items-center">
-                      <Calendar className="w-5 h-5 text-gray-400 mr-3" />
+                      <Calendar className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-3" />
                       <div>
-                        <p className="text-sm font-medium text-gray-500">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           Season
                         </p>
-                        <p className="text-gray-900 capitalize">
+                        <p className="text-gray-900 dark:text-white capitalize">
                           {item.season}
                         </p>
                       </div>
@@ -244,32 +252,32 @@ export default function ItemDetailsPage() {
 
                   {item.notes && (
                     <div>
-                      <p className="text-sm font-medium text-gray-500 mb-2">
+                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                         Notes
                       </p>
-                      <p className="text-gray-900 bg-gray-50 p-3 rounded-md">
+                      <p className="text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 p-3 rounded-md">
                         {item.notes}
                       </p>
                     </div>
                   )}
 
                   {/* Metadata */}
-                  <div className="pt-6 border-t border-gray-200">
+                  <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
                     <div className="grid grid-cols-1 gap-4">
                       <div>
-                        <p className="text-sm font-medium text-gray-500">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           Added
                         </p>
-                        <p className="text-gray-900">
+                        <p className="text-gray-900 dark:text-white">
                           {formatDate(item.createdAt)}
                         </p>
                       </div>
                       {item.updatedAt !== item.createdAt && (
                         <div>
-                          <p className="text-sm font-medium text-gray-500">
+                          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                             Last Updated
                           </p>
-                          <p className="text-gray-900">
+                          <p className="text-gray-900 dark:text-white">
                             {formatDate(item.updatedAt)}
                           </p>
                         </div>
