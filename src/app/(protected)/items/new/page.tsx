@@ -97,7 +97,7 @@ export default function NewItemPage() {
   const handleImageRemove = () => {
     setSelectedImage(null);
     setImagePreview(null);
-    form.setValue("image", undefined as any);
+    form.setValue("image", null as any);
   };
 
   const onSubmit = async (data: FormData) => {
@@ -113,7 +113,7 @@ export default function NewItemPage() {
 
       await itemsAPI.createItem(formData);
       router.push("/items");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Failed to create item:", error);
       // You could add a toast notification here
     } finally {
@@ -125,19 +125,9 @@ export default function NewItemPage() {
     <ProtectedRoute>
       <Sidebar>
         <div className="max-w-2xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <div className="mb-6">
-            <Link
-              href="/items"
-              className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700"
-            >
-              <ArrowLeft className="w-4 h-4 mr-1" />
-              Back to Items
-            </Link>
-          </div>
-
-          <div className="bg-white shadow rounded-lg">
+          <div className="bg-white dark:bg-black shadow rounded-lg">
             <div className="px-6 py-4 border-b border-gray-200">
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-neutral-200">
                 Add New Wardrobe Item
               </h1>
               <p className="mt-1 text-sm text-gray-600">

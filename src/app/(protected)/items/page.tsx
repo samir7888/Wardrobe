@@ -6,6 +6,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Sidebar from "@/components/Sidebar";
 import FilterCard from "@/components/FilterCard";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Item {
   id: string;
@@ -167,7 +168,7 @@ export default function ItemsPage() {
             <div className="md:px-4 py-6 sm:px-0">
               {/* Category Filter */}
               <div className="mb-8 w-full flex justify-center px-2">
-                <div className="w-full max-w-4xl">
+                <div className=" mx-auto max-w-7xl">
                   <FilterCard
                     tabs={CATEGORIES}
                     activeIndex={selectedCategoryIndex}
@@ -233,7 +234,9 @@ export default function ItemsPage() {
                           className="break-inside-avoid mb-4 group"
                         >
                           <div className="relative overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02]">
-                            <img
+                            <Image
+                              width={300}
+                              height={400}
                               className="w-full h-auto object-cover"
                               src={item.imageUrl}
                               alt={item.title}
@@ -266,7 +269,7 @@ export default function ItemsPage() {
                   {!hasMore && filteredItems.length > 0 && (
                     <div className="text-center py-8">
                       <p className="text-gray-500 text-sm">
-                        You've reached the end of your wardrobe!
+                        You&apos;ve reached the end of your wardrobe!
                       </p>
                     </div>
                   )}

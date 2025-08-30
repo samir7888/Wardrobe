@@ -130,7 +130,7 @@ export default function ImageUpload({
             </div>
 
             <div>
-              <p className="text-lg font-medium text-gray-900">
+              <p className="text-lg font-medium text-gray-900 dark:text-gray-200" >
                 Upload an image
               </p>
               <p className="text-sm text-gray-500">
