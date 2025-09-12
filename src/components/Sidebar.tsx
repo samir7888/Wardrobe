@@ -40,27 +40,27 @@ const navigation = [
     name: "Outfit Planner",
     href: "/outfits",
     icon: Palette,
-  },
-  {
-    name: "Analytics",
-    href: "/analytics",
-    icon: BarChart3,
-  },
-  {
-    name: "Categories",
-    href: "/categories",
-    icon: Grid3X3,
-  },
-  {
-    name: "Favorites",
-    href: "/favorites",
-    icon: Heart,
-  },
-  {
-    name: "Profile",
-    href: "/profile",
-    icon: User,
-  },
+  }
+  // {
+  //   name: "Analytics",
+  //   href: "/analytics",
+  //   icon: BarChart3,
+  // },
+  // {
+  //   name: "Categories",
+  //   href: "/categories",
+  //   icon: Grid3X3,
+  // },
+  // {
+  //   name: "Favorites",
+  //   href: "/favorites",
+  //   icon: Heart,
+  // },
+  // {
+  //   name: "Profile",
+  //   href: "/profile",
+  //   icon: User,
+  // },
 ];
 
 interface SidebarProps {
