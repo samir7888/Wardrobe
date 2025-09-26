@@ -10,9 +10,7 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: ["@prisma/client", "argon2"],
-  },
+  serverExternalPackages: ["@prisma/client", "argon2"],
 };
 
 module.exports = nextConfig;

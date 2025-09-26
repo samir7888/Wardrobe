@@ -5,11 +5,11 @@ import { CloudinaryService } from "@/lib/cloudinary";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await AuthService.getUserFromToken(request);
-    const { id } = params;
+    const { id } = await params;
 
     const item = await prisma.wardrobeItem.findFirst({
       where: { id, userId: user.id },
@@ -36,11 +36,11 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await AuthService.getUserFromToken(request);
-    const { id } = params;
+    const { id } = await params;
     const formData = await request.formData();
 
     const title = formData.get("title") as string;
@@ -59,7 +59,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Item not found" }, { status: 404 });
     }
 
-    let updateData: any = {};
+    const updateData: Record<string, any> = {};
 
     if (title) updateData.title = title;
     if (category) updateData.category = category;
@@ -128,11 +128,11 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await AuthService.getUserFromToken(request);
-    const { id } = params;
+    const { id } = await params;
 
     // Check if item exists and belongs to user
     const item = await prisma.wardrobeItem.findFirst({

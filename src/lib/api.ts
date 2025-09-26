@@ -110,7 +110,7 @@ export const authAPI = {
 
 // Items API
 export const itemsAPI = {
-  getItems: async (params?: any) => {
+  getItems: async (params?: Record<string, any>) => {
     const response: AxiosResponse = await apiClient.get("/api/items", {
       params,
     });

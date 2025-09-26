@@ -55,7 +55,7 @@ export class AuthService {
   static async verifyAccessToken(token: string): Promise<JwtPayload> {
     try {
       return jwt.verify(token, process.env.JWT_ACCESS_SECRET!) as JwtPayload;
-    } catch (error) {
+    } catch {
       throw new Error("Invalid access token");
     }
   }
@@ -63,7 +63,7 @@ export class AuthService {
   static async verifyRefreshToken(token: string): Promise<JwtPayload> {
     try {
       return jwt.verify(token, process.env.JWT_REFRESH_SECRET!) as JwtPayload;
-    } catch (error) {
+    } catch {
       throw new Error("Invalid refresh token");
     }
   }
@@ -88,7 +88,7 @@ export class AuthService {
       }
 
       return user;
-    } catch (error) {
+    } catch {
       throw new Error("Unauthorized");
     }
   }

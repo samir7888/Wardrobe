@@ -53,8 +53,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         isLoading: false,
         error: null,
       });
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "Login failed";
+    } catch (error: unknown) {
+      const errorMessage =
+        (error as any).response?.data?.message || "Login failed";
       set({
         isLoading: false,
         error: errorMessage,
@@ -82,9 +83,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         isLoading: false,
         error: null,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMessage =
-        error.response?.data?.message || "Registration failed";
+        (error as any).response?.data?.message || "Registration failed";
       set({
         isLoading: false,
         error: errorMessage,
@@ -96,9 +97,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   logout: async () => {
     try {
       await authAPI.logout();
-    } catch (error) {
+    } catch {
       // Continue with logout even if API call fails
-      console.error("Logout API call failed:", error);
+      console.error("Logout API call failed");
     }
 
     setAccessToken(null);

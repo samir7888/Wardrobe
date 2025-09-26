@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     // Build where clause
-    const where: any = { userId: user.id };
+    const where: Record<string, any> = { userId: user.id };
 
     if (category) where.category = category;
     if (color) where.color = { contains: color, mode: "insensitive" };
@@ -111,7 +111,12 @@ export async function POST(request: NextRequest) {
     const item = await prisma.wardrobeItem.create({
       data: {
         title,
-        category: category as any,
+        category: category as
+          | "TOP"
+          | "BOTTOM"
+          | "OUTERWEAR"
+          | "FOOTWEAR"
+          | "ACCESSORY",
         color: color || null,
         season: season || null,
         notes: notes || null,

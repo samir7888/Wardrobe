@@ -5,14 +5,22 @@ import { CloudinaryService } from "@/lib/cloudinary";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { category: string } }
+  { params }: { params: Promise<{ category: string }> }
 ) {
   try {
     const user = await AuthService.getUserFromToken(request);
-    const { category } = params;
+    const { category } = await params;
 
     const items = await prisma.wardrobeItem.findMany({
-      where: { userId: user.id, category: category as any },
+      where: {
+        userId: user.id,
+        category: category as
+          | "TOP"
+          | "BOTTOM"
+          | "OUTERWEAR"
+          | "FOOTWEAR"
+          | "ACCESSORY",
+      },
       orderBy: { createdAt: "desc" },
     });
 
