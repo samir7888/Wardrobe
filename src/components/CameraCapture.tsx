@@ -25,6 +25,7 @@ export default function CameraCapture({
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
 
   const startCamera = useCallback(async () => {
     setIsLoading(true);
@@ -32,8 +33,8 @@ export default function CameraCapture({
 
     try {
       // Stop existing stream if any
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
       }
 
       const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -44,6 +45,7 @@ export default function CameraCapture({
         },
       });
 
+      streamRef.current = mediaStream;
       setStream(mediaStream);
 
       if (videoRef.current) {
@@ -55,14 +57,15 @@ export default function CameraCapture({
     } finally {
       setIsLoading(false);
     }
-  }, [facingMode, stream]);
+  }, [facingMode]);
 
   const stopCamera = useCallback(() => {
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
       setStream(null);
     }
-  }, [stream]);
+  }, []);
 
   const capturePhoto = useCallback(() => {
     if (!videoRef.current || !canvasRef.current) return;
@@ -124,7 +127,7 @@ export default function CameraCapture({
     setCapturedImage(null);
     setError(null);
     onClose();
-  }, [stopCamera, onClose]);
+  }, [onClose]);
 
   useEffect(() => {
     if (isOpen) {
@@ -136,13 +139,16 @@ export default function CameraCapture({
     return () => {
       stopCamera();
     };
-  }, [isOpen, startCamera, stopCamera]);
+  }, [isOpen, facingMode]);
 
+  // Cleanup effect to ensure stream is stopped on unmount
   useEffect(() => {
-    if (isOpen && stream) {
-      startCamera();
-    }
-  }, [facingMode, isOpen, startCamera, stream]);
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, []);
 
   if (!isOpen) return null;
 
