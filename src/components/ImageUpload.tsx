@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Camera, Upload, X } from "lucide-react";
 import CameraCapture from "./CameraCapture";
+import Image from "next/image";
 
 interface ImageUploadProps {
   onImageSelect: (file: File) => void;
@@ -97,7 +98,9 @@ export default function ImageUpload({
     <div className={`space-y-4 ${className}`}>
       {imagePreview ? (
         <div className="relative">
-          <img
+          <Image
+            width={400}
+            height={600}
             src={imagePreview}
             alt="Preview"
             className="w-full max-w-sm h-48 object-cover rounded-lg border"
@@ -130,7 +133,7 @@ export default function ImageUpload({
             </div>
 
             <div>
-              <p className="text-lg font-medium text-gray-900 dark:text-gray-200" >
+              <p className="text-lg font-medium text-gray-900 dark:text-gray-200">
                 Upload an image
               </p>
               <p className="text-sm text-gray-500">
