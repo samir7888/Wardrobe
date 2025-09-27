@@ -19,7 +19,7 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      router.push("/dashboard");
+      router.push("/items");
     } catch (err: any) {
       // Error is now handled in the store
     }

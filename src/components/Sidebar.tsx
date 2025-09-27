@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 import {
-  LayoutDashboard,
   Shirt,
   Plus,
   Palette,
@@ -21,11 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 const navigation = [
-  {
-    name: "Dashboard",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-  },
+ 
   {
     name: "My Wardrobe",
     href: "/items",
