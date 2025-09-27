@@ -17,7 +17,7 @@ export default function FilterCard({
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(externalActiveIndex || 0);
   const [hoverStyle, setHoverStyle] = useState({});
-  const [activeStyle, setActiveStyle] = useState({ left: "0px", width: "0px" });
+
   const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -39,29 +39,6 @@ export default function FilterCard({
     }
   }, [hoveredIndex]);
 
-  useEffect(() => {
-    const activeElement = tabRefs.current[activeIndex];
-    if (activeElement) {
-      const { offsetLeft, offsetWidth } = activeElement;
-      setActiveStyle({
-        left: `${offsetLeft}px`,
-        width: `${offsetWidth}px`,
-      });
-    }
-  }, [activeIndex]);
-
-  useEffect(() => {
-    requestAnimationFrame(() => {
-      const overviewElement = tabRefs.current[0];
-      if (overviewElement) {
-        const { offsetLeft, offsetWidth } = overviewElement;
-        setActiveStyle({
-          left: `${offsetLeft}px`,
-          width: `${offsetWidth}px`,
-        });
-      }
-    });
-  }, []);
   if (!tabs) {
     return "No tabs available";
   }
