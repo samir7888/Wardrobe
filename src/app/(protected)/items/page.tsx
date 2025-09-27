@@ -168,7 +168,7 @@ export default function ItemsPage() {
             <div className="md:px-4 py-6 sm:px-0">
               {/* Category Filter */}
               <div className="mb-8 w-full flex justify-center px-2">
-                <div className=" mx-auto max-w-7xl">
+                <div className="mx-auto overflow-x-auto max-w-7xl">
                   <FilterCard
                     tabs={CATEGORIES}
                     activeIndex={selectedCategoryIndex}
