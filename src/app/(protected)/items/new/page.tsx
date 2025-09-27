@@ -125,7 +125,7 @@ export default function NewItemPage() {
     <ProtectedRoute>
       <Sidebar>
         <div className="max-w-2xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <div className="bg-white dark:bg-black shadow rounded-lg">
+          <div className="bg-white px-3 dark:bg-black shadow rounded-lg">
             <div className="px-6 py-4 border-b border-gray-200">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-neutral-200">
                 Add New Wardrobe Item
