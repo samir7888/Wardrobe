@@ -69,7 +69,7 @@ export default function FilterCard({
     <div className="w-full overflow-x-auto">
       <Card
         className={`inline-flex min-w-max p-1 rounded-full tracking-wide font-normal border border-gray-300 ${
-          isProduct ? "bg-brand-primary" : "bg-gray-200 dark:bg-gray-700"
+          isProduct ? "bg-brand-primary" : "bg-gray-200 dark:bg-transparent"
         }`}
       >
         <CardContent className="p-0">

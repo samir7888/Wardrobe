@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Camera, Upload, X } from "lucide-react";
 import CameraCapture from "./CameraCapture";
 import Image from "next/image";
+import { CldImage } from "next-cloudinary";
 
 interface ImageUploadProps {
   onImageSelect: (file: File) => void;
@@ -98,7 +99,7 @@ export default function ImageUpload({
     <div className={`space-y-4 ${className}`}>
       {imagePreview ? (
         <div className="relative">
-          <Image
+          <CldImage
             width={400}
             height={600}
             src={imagePreview}

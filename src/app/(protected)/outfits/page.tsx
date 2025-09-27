@@ -19,6 +19,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import Image from "next/image";
+import { CldImage } from "next-cloudinary";
 
 const categoryLabels = {
   top: "Tops",
@@ -216,7 +217,7 @@ export default function OutfitPlannerPage() {
                       item && (
                         <div key={category} className="text-center">
                           <div className="relative w-24 h-24 mx-auto mb-2 rounded-lg overflow-hidden bg-white shadow-sm">
-                            <Image
+                          <CldImage
                               src={item.imageUrl || "/api/placeholder/96/96"}
                               alt={item.imageUrl}
                               fill
@@ -290,7 +291,7 @@ export default function OutfitPlannerPage() {
                                   }
                                 >
                                   <div className="aspect-square relative rounded-md overflow-hidden">
-                                    <Image
+                                    <CldImage
                                       src={
                                         item.imageUrl ||
                                         "/api/placeholder/120/120"
@@ -341,7 +342,7 @@ export default function OutfitPlannerPage() {
                             className="flex items-center gap-3"
                           >
                             <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
-                              <Image
+                              <CldImage
                                 src={item.imageUrl || "/api/placeholder/64/64"}
                                 alt={item.name}
                                 fill

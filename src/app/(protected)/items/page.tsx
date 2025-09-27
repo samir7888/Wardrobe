@@ -6,8 +6,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Sidebar from "@/components/Sidebar";
 import FilterCard from "@/components/FilterCard";
 import Link from "next/link";
-import Image from "next/image";
-
+import { CldImage } from 'next-cloudinary';
 interface Item {
   id: string;
   title: string;
@@ -234,7 +233,7 @@ export default function ItemsPage() {
                           className="break-inside-avoid mb-4 group"
                         >
                           <div className="relative overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02]">
-                            <Image
+                            <CldImage
                               width={300}
                               height={400}
                               className="w-full h-auto object-cover"
