@@ -191,7 +191,7 @@ export default function EditItemPage() {
   if (error && !item) {
     return (
       <ProtectedRoute>
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-500">
           <div className="max-w-2xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <div className="mb-6">
               <Link
@@ -227,7 +227,7 @@ export default function EditItemPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-black">
         <div className="max-w-2xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
             <Link
@@ -239,7 +239,7 @@ export default function EditItemPage() {
             </Link>
           </div>
 
-          <div className="bg-white shadow rounded-lg">
+          <div className="bg-neutral-900 shadow rounded-lg">
             <div className="px-6 py-4 border-b border-gray-200">
               <h1 className="text-2xl font-bold text-gray-900">
                 Edit Item: {item.title}
@@ -298,6 +298,7 @@ export default function EditItemPage() {
                         <SelectContent>
                           {categories.map((category) => (
                             <SelectItem
+                            className="py-3"
                               key={category.value}
                               value={category.value}
                             >
