@@ -2,7 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { AuthService } from "@/lib/auth";
 import { CloudinaryService } from "@/lib/cloudinary";
-import { WardrobeItem } from "@prisma/client";
+
+type WardrobeItemType = {
+  id: string;
+  userId: string;
+  title: string;
+  category: string;
+  color: string | null;
+  season: string | null;
+  imageUrl: string;
+  cloudId: string;
+  notes: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export async function GET(
   request: NextRequest,
@@ -25,7 +38,7 @@ export async function GET(
       orderBy: { createdAt: "desc" },
     });
 
-    const formattedItems = items.map((item: WardrobeItem) => ({
+    const formattedItems = items.map((item: WardrobeItemType) => ({
       ...item,
       thumbnailUrl: CloudinaryService.getImageUrl(
         item.cloudId,
