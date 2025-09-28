@@ -18,6 +18,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const navigation = [
  
@@ -90,9 +91,12 @@ export default function Sidebar({ children }: SidebarProps) {
         )}
       >
         <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-            Wardrobe
-          </h1>
+          <Image
+          src={"/logo.png"}
+          alt="Logo"
+          width={50}
+          height={50}
+          />
           <Button
             variant="ghost"
             size="sm"
@@ -112,10 +116,13 @@ export default function Sidebar({ children }: SidebarProps) {
       {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
         <div className="flex flex-col flex-grow bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-sm">
-          <div className="flex items-center h-16 px-4 border-b border-gray-200 dark:border-gray-700">
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-              Wardrobe
-            </h1>
+          <div className=" py-12 flex items-center h-16 px-4 border-b border-gray-200 dark:border-gray-700">
+             <Image
+          src={"/logo.png"}
+          alt="Logo"
+          width={150}
+          height={150}
+          />
           </div>
           <SidebarContent
             navigation={navigation}
